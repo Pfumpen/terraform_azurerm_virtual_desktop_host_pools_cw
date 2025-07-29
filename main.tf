@@ -10,7 +10,7 @@ resource "azurerm_virtual_desktop_host_pool" "this" {
   start_vm_on_connect                = try(var.host_pool.start_vm_on_connect, false)
   custom_rdp_properties              = try(var.host_pool.custom_rdp_properties, null)
   personal_desktop_assignment_type   = try(var.host_pool.personal_desktop_assignment_type, null)
-  public_network_access              = try(var.host_pool.public_network_access, "Enabled")
+  public_network_access              = try(var.host_pool.public_network_access, "Disabled")
   maximum_sessions_allowed           = try(var.host_pool.maximum_sessions_allowed, null)
   preferred_app_group_type           = try(var.host_pool.preferred_app_group_type, "Desktop")
   vm_template                        = try(var.host_pool.vm_template, null)

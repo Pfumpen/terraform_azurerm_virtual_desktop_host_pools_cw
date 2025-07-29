@@ -75,14 +75,9 @@ module "virtual_desktop_host_pool" {
     }
   }
 
+  diagnostics_level = "detailed"
   diagnostic_settings = {
-    enabled                    = true
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
-    log_categories = [
-      "Checkpoint",
-      "Error",
-      "Management"
-    ]
   }
 
   role_assignments = {

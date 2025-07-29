@@ -76,14 +76,9 @@ module "virtual_desktop_host_pool" {
     }
   }
 
+  diagnostics_level = "detailed"
   diagnostic_settings = {
-    enabled                    = true
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
-    log_categories = [
-      "Checkpoint",
-      "Error",
-      "Management"
-    ]
   }
 
   role_assignments = {
@@ -111,7 +106,10 @@ module "virtual_desktop_host_pool" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | `host_pool` | Configuration for the Virtual Desktop Host Pool. All core settings are defined here. | `object` | n/a | yes |
-| `diagnostic_settings` | A map of diagnostic settings to apply to the host pool. | `object` | `{}` | no |
+| `diagnostics_level` | Defines the detail level for diagnostics. Possible values: 'none', 'basic', 'detailed', 'custom'. | `string` | `"basic"` | no |
+| `diagnostic_settings` | A map containing the destination IDs for diagnostic settings. | `object` | `{}` | no |
+| `diagnostics_custom_logs` | A list of log categories to enable when diagnostics_level is 'custom'. | `list(string)` | `[]` | no |
+| `diagnostics_custom_metrics` | A list of metric categories to enable when diagnostics_level is 'custom'. | `list(string)` | `[]` | no |
 | `role_assignments` | A map of role assignments to apply to the host pool. | `map(object)` | `{}` | no |
 | `private_endpoints` | A map of private endpoints to create for the host pool. | `map(object)` | `{}` | no |
 | `enable_telemetry` | Enable telemetry collection for the module. | `bool` | `true` | no |
@@ -141,15 +139,13 @@ module "virtual_desktop_host_pool" {
 
 ### `diagnostic_settings` object
 
+When `diagnostics_level` is not `none`, exactly one of the following attributes must be specified.
+
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| `enabled` | Whether to create diagnostic settings for the host pool. | `bool` | `false` | no |
-| `name` | The name of the diagnostic setting. | `string` | `diag-${var.host_pool.name}` | no |
-| `log_analytics_workspace_id` | The ID of the Log Analytics Workspace. | `string` | `null` | no |
-| `storage_account_id` | The ID of the Storage Account. | `string` | `null` | no |
-| `eventhub_authorization_rule_id` | The ID of the Event Hub Authorization Rule. | `string` | `null` | no |
-| `log_categories` | A set of log categories to send to the destination. | `set(string)` | `[]` | no |
-| `metric_categories` | A set of metric categories to send to the destination. | `set(string)` | `["AllMetrics"]` | no |
+| `log_analytics_workspace_id` | The ID of the Log Analytics Workspace to send diagnostics to. | `string` | `null` | no |
+| `eventhub_authorization_rule_id` | The ID of the Event Hub Authorization Rule to send diagnostics to. | `string` | `null` | no |
+| `storage_account_id` | The ID of the Storage Account to send diagnostics to. | `string` | `null` | no |
 
 ### `role_assignments` map
 
