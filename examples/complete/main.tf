@@ -75,7 +75,7 @@ module "virtual_desktop_host_pool" {
     }
   }
 
-  diagnostics_level = "detailed"
+  diagnostics_level = "all"
   diagnostic_settings = {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
   }

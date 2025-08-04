@@ -76,7 +76,7 @@ module "virtual_desktop_host_pool" {
     }
   }
 
-  diagnostics_level = "detailed"
+  diagnostics_level = "all"
   diagnostic_settings = {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
   }
@@ -106,10 +106,10 @@ module "virtual_desktop_host_pool" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | `host_pool` | Configuration for the Virtual Desktop Host Pool. All core settings are defined here. | `object` | n/a | yes |
-| `diagnostics_level` | Defines the detail level for diagnostics. Possible values: 'none', 'basic', 'detailed', 'custom'. | `string` | `"basic"` | no |
-| `diagnostic_settings` | A map containing the destination IDs for diagnostic settings. | `object` | `{}` | no |
-| `diagnostics_custom_logs` | A list of log categories to enable when diagnostics_level is 'custom'. | `list(string)` | `[]` | no |
-| `diagnostics_custom_metrics` | A list of metric categories to enable when diagnostics_level is 'custom'. | `list(string)` | `[]` | no |
+| `diagnostics_level` | Defines the desired diagnostic intent. 'all' and 'audit' are dynamically mapped to available categories. Possible values: 'none', 'all', 'audit', 'custom'. | `string` | `"none"` | no |
+| `diagnostic_settings` | A map containing the destination IDs for diagnostic settings. When diagnostics are enabled, exactly one destination must be specified. | `object` | `{}` | no |
+| `diagnostics_custom_logs` | A list of specific log categories to enable when diagnostics_level is 'custom'. | `list(string)` | `[]` | no |
+| `diagnostics_custom_metrics` | A list of specific metric categories to enable. Use ['AllMetrics'] for all. | `list(string)` | `["AllMetrics"]` | no |
 | `role_assignments` | A map of role assignments to apply to the host pool. | `map(object)` | `{}` | no |
 | `private_endpoints` | A map of private endpoints to create for the host pool. | `map(object)` | `{}` | no |
 | `enable_telemetry` | Enable telemetry collection for the module. | `bool` | `true` | no |
@@ -136,16 +136,6 @@ module "virtual_desktop_host_pool" {
 | `tags` | A map of tags to assign to the resource. | `map(string)` | `{}` | no |
 | `scheduled_agent_updates` | The scheduled agent updates for the host pool. | `object` | `{}` | no |
 | `registration_info` | The registration info for the host pool. | `object` | `null` | no |
-
-### `diagnostic_settings` object
-
-When `diagnostics_level` is not `none`, exactly one of the following attributes must be specified.
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| `log_analytics_workspace_id` | The ID of the Log Analytics Workspace to send diagnostics to. | `string` | `null` | no |
-| `eventhub_authorization_rule_id` | The ID of the Event Hub Authorization Rule to send diagnostics to. | `string` | `null` | no |
-| `storage_account_id` | The ID of the Storage Account to send diagnostics to. | `string` | `null` | no |
 
 ### `role_assignments` map
 

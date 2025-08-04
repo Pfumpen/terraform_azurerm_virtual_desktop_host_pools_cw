@@ -78,12 +78,12 @@ variable "host_pool" {
 }
 
 variable "diagnostics_level" {
-  description = "Defines the detail level for diagnostics. Possible values: 'none', 'basic', 'detailed', 'custom'."
+  description = "Defines the desired diagnostic intent. 'all' and 'audit' are dynamically mapped to available categories. Possible values: 'none', 'all', 'audit', 'custom'."
   type        = string
   default     = "none"
   validation {
-    condition     = contains(["none", "basic", "detailed", "custom"], var.diagnostics_level)
-    error_message = "Valid values for diagnostics_level are 'none', 'basic', 'detailed', or 'custom'."
+    condition     = contains(["none", "all", "audit", "custom"], var.diagnostics_level)
+    error_message = "Valid values for diagnostics_level are 'none', 'all', 'audit', or 'custom'."
   }
 }
 
@@ -114,9 +114,9 @@ variable "diagnostics_custom_logs" {
 }
 
 variable "diagnostics_custom_metrics" {
-  description = "A list of metric categories to enable when diagnostics_level is 'custom'. Use ['AllMetrics'] for all."
+  description = "A list of specific metric categories to enable. Use ['AllMetrics'] for all."
   type        = list(string)
-  default     = []
+  default     = ["AllMetrics"]
 }
 
 variable "role_assignments" {
