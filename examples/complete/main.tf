@@ -71,7 +71,8 @@ module "virtual_desktop_host_pool" {
       ]
     }
     registration_info = {
-      expiration_date = "2025-12-31T23:59:59Z"
+      enabled        = true
+      duration_hours = 48
     }
   }
 

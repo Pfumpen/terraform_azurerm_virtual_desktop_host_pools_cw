@@ -27,7 +27,8 @@ variable "host_pool" {
       })), [])
     }))
     registration_info = optional(object({
-      expiration_date = string
+      enabled        = bool
+      duration_hours = optional(number, 24)
     }))
   })
   nullable = false
