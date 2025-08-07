@@ -160,6 +160,12 @@ variable "private_endpoints" {
     ])
     error_message = "Each private endpoint must have a 'subnet_id' and at least one 'subresource_names'."
   }
+
+  validation {
+    condition     = var.host_pool.public_network_access == "Enabled" || length(var.private_endpoints) > 0
+    error_message = "When public_network_access is disabled, at least one private endpoint must be configured."
+  }
+
 }
 
 variable "enable_telemetry" {
