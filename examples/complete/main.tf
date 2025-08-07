@@ -89,9 +89,8 @@ module "virtual_desktop_host_pool" {
   }
 
   private_endpoints = {
-    hostpool = {
-      subnet_id         = azurerm_subnet.this.id
-      subresource_names = ["hostpool"]
+    "main" = {
+      subnet_id = azurerm_subnet.this.id
       private_dns_zone_group = {
         name                 = "default"
         private_dns_zone_ids = [azurerm_private_dns_zone.this.id]

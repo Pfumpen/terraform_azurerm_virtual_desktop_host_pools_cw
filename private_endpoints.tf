@@ -11,7 +11,7 @@ resource "azurerm_private_endpoint" "this" {
     name                           = "psc-${var.host_pool.name}-${each.key}"
     private_connection_resource_id = azurerm_virtual_desktop_host_pool.this.id
     is_manual_connection           = false
-    subresource_names              = each.value.subresource_names
+    subresource_names              = ["connection"]
   }
 
   dynamic "private_dns_zone_group" {

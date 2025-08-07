@@ -89,9 +89,8 @@ module "virtual_desktop_host_pool" {
   }
 
   private_endpoints = {
-    hostpool = {
-      subnet_id         = azurerm_subnet.this.id
-      subresource_names = ["hostpool"]
+    "main" = {
+      subnet_id = azurerm_subnet.this.id
       private_dns_zone_group = {
         name                 = "default"
         private_dns_zone_ids = [azurerm_private_dns_zone.this.id]
@@ -111,7 +110,7 @@ module "virtual_desktop_host_pool" {
 | `diagnostics_custom_logs` | A list of specific log categories to enable when diagnostics_level is 'custom'. | `list(string)` | `[]` | no |
 | `diagnostics_custom_metrics` | A list of specific metric categories to enable. Use ['AllMetrics'] for all. | `list(string)` | `["AllMetrics"]` | no |
 | `role_assignments` | A map of role assignments to apply to the host pool. | `map(object)` | `{}` | no |
-| `private_endpoints` | A map of private endpoints to create for the host pool. | `map(object)` | `{}` | no |
+| `private_endpoints` | A map of private endpoints to create for the host pool. The module will automatically use the required 'connection' sub-resource. The map key is a logical name for the endpoint. | `map(object)` | `{}` | no |
 | `enable_telemetry` | Enable telemetry collection for the module. | `bool` | `true` | no |
 
 ### `host_pool` object
@@ -153,7 +152,6 @@ module "virtual_desktop_host_pool" {
 |------|-------------|------|---------|:--------:|
 | `name` | The name of the private endpoint. | `string` | `pep-${var.host_pool.name}-${each.key}` | no |
 | `subnet_id` | The ID of the subnet. | `string` | n/a | yes |
-| `subresource_names` | A list of sub-resource names. | `list(string)` | n/a | yes |
 | `private_dns_zone_group` | The private DNS zone group. | `object` | `null` | no |
 
 ## Outputs

@@ -141,31 +141,21 @@ variable "role_assignments" {
 }
 
 variable "private_endpoints" {
-  description = "A map of private endpoints to create for the host pool."
+  description = "A map of private endpoints to create for the host pool. The module will automatically use the required 'connection' sub-resource. The map key is a logical name for the endpoint."
   type = map(object({
-    name                  = optional(string)
-    subnet_id             = string
-    subresource_names     = list(string)
-    private_dns_zone_group = optional(object({
+    name = optional(string)
+    subnet_id = string
+    private_dns_zone_group = object({
       name                 = string
       private_dns_zone_ids = list(string)
-    }))
+    })
   }))
   default = {}
-
-  validation {
-    condition = alltrue([
-      for k, v in var.private_endpoints :
-      v.subnet_id != null && length(v.subresource_names) > 0
-    ])
-    error_message = "Each private endpoint must have a 'subnet_id' and at least one 'subresource_names'."
-  }
 
   validation {
     condition     = var.host_pool.public_network_access == "Enabled" || length(var.private_endpoints) > 0
     error_message = "When public_network_access is disabled, at least one private endpoint must be configured."
   }
-
 }
 
 variable "enable_telemetry" {
