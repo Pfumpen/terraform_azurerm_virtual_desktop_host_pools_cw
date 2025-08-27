@@ -78,6 +78,12 @@ variable "host_pool" {
   }
 }
 
+variable "tags" {
+  description = "A map of tags to apply to the resources."
+  type        = map(string)
+  default     = {}
+}
+
 variable "diagnostics_level" {
   description = "Defines the desired diagnostic intent. 'all' and 'audit' are dynamically mapped to available categories. Possible values: 'none', 'all', 'audit', 'custom'."
   type        = string
@@ -156,10 +162,4 @@ variable "private_endpoints" {
     condition     = var.host_pool.public_network_access == "Enabled" || length(var.private_endpoints) > 0
     error_message = "When public_network_access is disabled, at least one private endpoint must be configured."
   }
-}
-
-variable "enable_telemetry" {
-  description = "Enable telemetry collection for the module."
-  type        = bool
-  default     = true
 }

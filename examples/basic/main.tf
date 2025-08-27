@@ -19,5 +19,4 @@ module "virtual_desktop_host_pool" {
     load_balancer_type  = "BreadthFirst"
   }
 
-  enable_telemetry = false
 }

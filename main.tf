@@ -1,3 +1,11 @@
+locals {
+  # Merge default tags with user-provided tags
+  tags = merge(
+    { "deployment" = "terraform" },
+    var.tags
+  )
+}
+
 resource "azurerm_virtual_desktop_host_pool" "this" {
   name                               = var.host_pool.name
   location                           = var.host_pool.location
@@ -14,7 +22,7 @@ resource "azurerm_virtual_desktop_host_pool" "this" {
   maximum_sessions_allowed           = try(var.host_pool.maximum_sessions_allowed, null)
   preferred_app_group_type           = try(var.host_pool.preferred_app_group_type, "Desktop")
   vm_template                        = try(var.host_pool.vm_template, null)
-  tags                               = var.host_pool.tags
+  tags                               = local.tags
 
   dynamic "scheduled_agent_updates" {
     for_each = try(var.host_pool.scheduled_agent_updates, null) != null ? [var.host_pool.scheduled_agent_updates] : []
@@ -39,4 +47,3 @@ resource "azurerm_virtual_desktop_host_pool" "this" {
     ]
   }
 }
-
