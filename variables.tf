@@ -1,22 +1,22 @@
 variable "host_pool" {
   description = "Configuration for the Virtual Desktop Host Pool. All core settings are defined here."
   type = object({
-    name                               = string
-    location                           = string
-    resource_group_name                = string
-    type                               = string
-    load_balancer_type                 = string
-    friendly_name                      = optional(string)
-    description                        = optional(string)
-    validate_environment               = optional(bool, false)
-    start_vm_on_connect                = optional(bool, false)
-    custom_rdp_properties              = optional(string)
-    personal_desktop_assignment_type   = optional(string)
-    public_network_access              = optional(string, "Enabled")
-    maximum_sessions_allowed           = optional(number)
-    preferred_app_group_type           = optional(string, "Desktop")
-    vm_template                        = optional(string)
-    tags                               = optional(map(string), {})
+    name                             = string
+    location                         = string
+    resource_group_name              = string
+    type                             = string
+    load_balancer_type               = string
+    friendly_name                    = optional(string)
+    description                      = optional(string)
+    validate_environment             = optional(bool, false)
+    start_vm_on_connect              = optional(bool, false)
+    custom_rdp_properties            = optional(string)
+    personal_desktop_assignment_type = optional(string)
+    public_network_access            = optional(string, "Enabled")
+    maximum_sessions_allowed         = optional(number)
+    preferred_app_group_type         = optional(string, "Desktop")
+    vm_template                      = optional(string)
+    tags                             = optional(map(string), {})
     scheduled_agent_updates = optional(object({
       enabled                   = optional(bool, false)
       timezone                  = optional(string, "UTC")
@@ -69,7 +69,7 @@ variable "host_pool" {
   }
 
   validation {
-    condition     = alltrue([
+    condition = alltrue([
       for schedule in try(var.host_pool.scheduled_agent_updates.schedules, []) :
       contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], schedule.day_of_week) &&
       schedule.hour_of_day >= 0 && schedule.hour_of_day <= 23
@@ -104,7 +104,6 @@ variable "diagnostic_settings" {
   default = {}
 
   validation {
-    # This rule ensures that if diagnostics are enabled, the user provides exactly one valid destination.
     condition = var.diagnostics_level == "none" || (
       (try(var.diagnostic_settings.log_analytics_workspace_id, null) != null ? 1 : 0) +
       (try(var.diagnostic_settings.eventhub_authorization_rule_id, null) != null ? 1 : 0) +
@@ -149,7 +148,7 @@ variable "role_assignments" {
 variable "private_endpoints" {
   description = "A map of private endpoints to create for the host pool. The module will automatically use the required 'connection' sub-resource. The map key is a logical name for the endpoint."
   type = map(object({
-    name = optional(string)
+    name      = optional(string)
     subnet_id = string
     private_dns_zone_group = object({
       name                 = string
